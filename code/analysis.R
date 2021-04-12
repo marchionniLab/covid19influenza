@@ -9,7 +9,6 @@ to_run <- c(
   # "us_preprocess.R" # instead of running this we load the data already processed
 )
 
-
 dat_original <- readRDS(here("data", "data_us.RDS"))
 
 lapply(to_run, function(x) source(here("code", "scripts", x)))
@@ -486,3 +485,114 @@ pp_supp <- summary_strata_last_day  %>%
          `Stratum 2` = `2`,
          `Stratum 3` = `3`,
   )
+
+# @@@@@@@@@@@@@@@@
+# Correlation Plot
+# @@@@@@@@@@@@@@@@
+
+
+new_names <- c(
+  "Death rate", 
+  "Confirmed-case rate", 
+  "Number of days since first case", 
+  "% families",
+  "% families with only 1 parent",
+  "% with bachelor or higher degree",
+  "% with internet",
+  "Median income",
+  "% influenza vaccination coverage", 
+  "Ratio of hospital beds",
+  "% with Alzheimer's disease",
+  "% with asthma",
+  "% with atrial fibrillation",
+  "% with breast cancer",
+  "% with colorectal cancer",
+  "% with lung cancer",
+  "% with obstructive pulmonary disease",
+  "% with chronic kidney disease",
+  "% with depression",
+  "% with diabetes",
+  "% with heart failure",
+  "% with hypertension",
+  "% with ischemic heart disease",
+  "% with obesity",
+  "% with rheumatoid arthritis",
+  "% stroke transient ischemic attack",
+  "% using tobacco",
+  
+  "Average PM2.5", #(\u00b5/\u33a5)
+  "Summer temperature",
+  "% summer humidity",
+  "Winter temperature",
+  "Winter humidity",
+  
+  "Median age",
+  "% 65 years or more of age",
+  "Sex ratio",
+  "Child dependency ratio",
+  
+  "% Blacks",
+  "% Latinos",
+  "% Whites",
+  "% Asians",
+  "% Native Islanders",
+  "% other race",
+  "% two more races")
+         
+
+col_fun <- colorRampPalette(c("blue", "white", "red"))
+
+
+# png(file = here::here("data", "corr.png"), 
+#     width = 6,
+#     height = 5, 
+#     units = "in", 
+#     res = 600)
+
+dat_original %>% 
+  filter(NC_cases > 0) %>% 
+  filter(date == date_freeze) %>% 
+  mutate(XX_ratio_beds = XX_ratio_beds * 1000) %>% 
+  mutate(
+    death_rate = YY_deaths / NP_total_pop * 100000,
+    case_ratio = NC_cases / NP_total_pop * 100000,
+    XX_median_income = XX_median_income / 1000
+  ) %>% 
+  select(any_of(new_order)) %>%
+  select(-NC_cases, -logitZZ_perc_imm65) %>% 
+  setNames(new_names) %>% 
+  cor(method = "pearson", use = "complete.obs") %>% 
+  corrplot::corrplot(
+    tl.col = "black",
+    tl.cex = 0.52, 
+    method = "color",
+    type = "full",
+    order = "hclust",
+    col  = col_fun(20),
+    cl.length = 11,
+    cl.cex = 0.5) 
+
+# dev.off()
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

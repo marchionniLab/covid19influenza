@@ -24,7 +24,7 @@ Imada, Elizabeth Colantuoni, Giovanni Parmigiani, and Luigi Marchionni*
 It contains functions, and scripts used to retrieve and analyze data.
 
 -   `code/script/libraries.R`: loads the libraries (including the one to
-    retrieve data).
+    retrieve data) and set some parameters.
 
 -   `code/script/functions_analysis.R`: contains main functions used to
     analyze the data. Documentation on the arguments, and object
