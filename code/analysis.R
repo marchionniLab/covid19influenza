@@ -574,11 +574,17 @@ dat_original %>%
 
 # dev.off()
 
+# @@@@@@@@@@@@@@@@@@@@@@
+# Seme Descriptive Stats
+# @@@@@@@@@@@@@@@@@@@@@@
 
-
+dat_original %>% 
+  filter(NC_cases > 0) %>% 
+  filter(date == date_freeze) %>% 
+  summarise(mean_m = mean(YY_deaths), sd = sd(YY_deaths))
   
 
-
+# mean 118 sd 426
 
 
 
